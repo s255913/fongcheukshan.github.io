@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ryan Fong · City Line</title>
+  <meta name="description" content="Personal site of Fong Cheuk Shan (Ryan), Year 4 BBA-Marketing student at The Hang Seng University of Hong Kong.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@330;420;560&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #090d14;
+      --panel: #121826ee;
+      --line: #2a3548;
+      --paper: #f3ecdf;
+      --muted: #a9b4c4;
+      --cyan: #3ee0c5;
+      --amber: #ffb020;
+      --magenta: #ff4f8b;
+      --blue: #7eb6ff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: Outfit, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 420px at 80% -10%, #1c2a4488, transparent 60%),
+        radial-gradient(700px 380px at -10% 20%, #3a183088, transparent 55%),
+        var(--ink);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(#000, transparent 85%);
+      z-index: 0;
+    }
+    a { color: inherit; text-decoration: none; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 7vw;
+      background: #090d14d8;
+      border-bottom: 1px solid #ffffff14;
+      backdrop-filter: blur(10px);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: Syne, sans-serif; letter-spacing: .04em; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+    .brand small { display: block; color: var(--muted); font-family: Outfit, sans-serif; font-weight: 420; letter-spacing: .16em; font-size: 10px; }
+    .nav { display: flex; gap: 18px; font-size: 14px; color: var(--muted); }
+    .nav a:hover, .nav a.active { color: var(--paper); }
+    .menu-btn { display: none; background: transparent; color: var(--paper); border: 1px solid #ffffff33; border-radius: 999px; padding: 6px 12px; }
+    .wrap { position: relative; z-index: 1; width: min(1080px, 92vw); margin: 0 auto; }
+    .hero { display: grid; grid-template-columns: 1.3fr .7fr; gap: 28px; padding: 64px 0 28px; align-items: end; }
+    .kicker { color: var(--amber); letter-spacing: .22em; font-size: 12px; text-transform: uppercase; }
+    h1 { font-family: Syne, sans-serif; font-size: clamp(42px, 7vw, 84px); line-height: .9; margin: 10px 0 8px; }
+    h1 span { color: var(--cyan); }
+    .lead { font-size: 18px; max-width: 620px; color: #e7e0d4; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .pill { border: 1px solid #ffffff24; border-radius: 999px; padding: 7px 12px; font-size: 13px; color: var(--muted); }
+    .ticket {
+      background: var(--paper);
+      color: #1a140d;
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+      transform: rotate(-1.5deg);
+      box-shadow: 0 20px 50px #0008;
+    }
+    .ticket header { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .14em; }
+    .ticket strong { font-family: Syne, sans-serif; font-size: 22px; display: block; margin: 14px 0 4px; }
+    .ticket p { margin: 0; font-size: 14px; }
+    .perf { margin-top: 16px; border-top: 1px dashed #1a140d55; padding-top: 10px; display: flex; justify-content: space-between; font-size: 12px; }
+    .skyline { height: 74px; margin-top: 8px; }
+    section { padding: 28px 0 10px; }
+    h2 { font-family: Syne, sans-serif; font-size: 32px; margin: 0 0 8px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .route { display: grid; gap: 0; }
+    .stop { display: grid; grid-template-columns: 28px 1fr; gap: 14px; }
+    .rail { display: flex; flex-direction: column; align-items: center; }
+    .node { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--cyan); background: var(--ink); margin-top: 6px; }
+    .node.amber { border-color: var(--amber); }
+    .node.magenta { border-color: var(--magenta); }
+    .stem { width: 3px; flex: 1; background: linear-gradient(var(--cyan), var(--amber)); min-height: 28px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid #ffffff14;
+      border-radius: 16px;
+      padding: 16px 18px 18px;
+      margin-bottom: 14px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 18px; }
+    .card p { margin: 0; color: #ddd4c6; line-height: 1.55; }
+    .tag { color: var(--cyan); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .sports { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .sport {
+      background: #101722;
+      border: 1px solid #ffffff16;
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+    .sport:hover, .sport.open { border-color: var(--amber); transform: translateY(-2px); }
+    .sport b { display: block; font-family: Syne, sans-serif; font-size: 20px; margin-bottom: 6px; }
+    .sport span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .more { display: none; margin-top: 10px; color: #efe7da; font-size: 14px; }
+    .sport.open .more { display: block; }
+    .events { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .chip { background: #24180f; color: var(--amber); border-radius: 999px; padding: 8px 12px; font-size: 13px; }
+    .next { display: grid; grid-template-columns: 1.4fr .8fr; gap: 16px; }
+    .sign {
+      border-radius: 16px;
+      padding: 22px;
+      background: linear-gradient(160deg, #1b2433, #10151f);
+      border: 1px solid #ffffff16;
+    }
+    .neon {
+      font-family: Syne, sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      color: var(--magenta);
+      text-shadow: 0 0 18px #ff4f8b88;
+      margin: 8px 0;
+    }
+    footer { color: var(--muted); font-size: 13px; padding: 28px 0 48px; }
+    @media (max-width: 800px) {
+      .hero, .next, .sports { grid-template-columns: 1fr; }
+      .nav { display: none; position: absolute; right: 6vw; top: 62px; flex-direction: column; background: #121826; padding: 12px 16px; border-radius: 12px; border: 1px solid #ffffff22; }
+      .nav.open { display: flex; }
+      .menu-btn { display: inline-block; }
+      .ticket { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="dot"></span><div>CITY LINE<small>RYAN FONG</small></div></div>
+    <nav class="nav" id="nav">
+      <a href="#about">Route</a>
+      <a href="#study">Studies</a>
+      <a href="#watch">Watching</a>
+      <a href="#next">Next stop</a>
+    </nav>
+    <button class="menu-btn" id="menu" type="button">Menu</button>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="kicker">Sha Tin line · Year 4</div>
+        <h1>Fong Cheuk Shan<br><span>Ryan</span></h1>
+        <p class="lead">Year 4 BBA-Marketing student at The Hang Seng University of Hong Kong. I came in through a Higher Diploma in Marketing at HKU SPACE, and I want the next stop to be event marketing.</p>
+        <div class="pills">
+          <span class="pill">BBA-Marketing</span>
+          <span class="pill">HSUHK</span>
+          <span class="pill">HKU SPACE HD</span>
+          <span class="pill">Event marketing</span>
+        </div>
+      </div>
+      <aside class="ticket">
+        <header><span>SINGLE RIDE</span><span>Y4</span></header>
+        <strong>Personal site</strong>
+        <p>Marketing student. Sports spectator. Looking toward live events.</p>
+        <svg class="skyline" viewBox="0 0 280 74" aria-hidden="true">
+          <rect x="8" y="34" width="18" height="40" fill="#1a140d"/>
+          <rect x="30" y="18" width="22" height="56" fill="#1a140d"/>
+          <rect x="56" y="40" width="14" height="34" fill="#1a140d"/>
+          <rect x="76" y="10" width="26" height="64" fill="#1a140d"/>
+          <rect x="108" y="28" width="16" height="46" fill="#1a140d"/>
+          <rect x="130" y="22" width="34" height="52" fill="#1a140d"/>
+          <rect x="170" y="36" width="18" height="38" fill="#1a140d"/>
+          <rect x="194" y="14" width="24" height="60" fill="#1a140d"/>
+          <rect x="224" y="30" width="16" height="44" fill="#1a140d"/>
+          <rect x="246" y="42" width="22" height="32" fill="#1a140d"/>
+          <rect x="84" y="16" width="6" height="6" fill="#ff4f8b"/>
+          <rect x="140" y="30" width="6" height="6" fill="#ffb020"/>
+          <rect x="204" y="22" width="6" height="6" fill="#3ee0c5"/>
+        </svg>
+        <div class="perf"><span>FROM SPACE</span><span>TO HSUHK</span></div>
+      </aside>
+    </section>
+
+    <section id="about">
+      <h2>The route so far</h2>
+      <p class="sub">Not a straight academic track. A transfer from a marketing diploma into the degree years.</p>
+      <div class="route">
+        <div class="stop">
+          <div class="rail"><div class="node"></div><div class="stem"></div></div>
+          <article class="card">
+            <div class="tag">Origin</div>
+            <h3>Higher Diploma in Marketing, HKU SPACE</h3>
+            <p>I completed a Higher Diploma in Marketing at HKU SPACE before moving on. That programme gave me the marketing base I am still using: how a message is built, who it is for, and how a campaign has to work outside the classroom.</p>
+          </article>
+        </div>
+        <div class="stop">
+          <div class="rail"><div class="node amber"></div><div class="stem"></div></div>
+          <article class="card">
+            <div class="tag">Interchange</div>
+            <h3>Into Year 3 at Hang Seng University</h3>
+            <p>After graduating from HKU SPACE, I continued into the BBA-Marketing programme at The Hang Seng University of Hong Kong, starting from Year 3 rather than Year 1. The change of campus also meant a change of pace: more degree-level analysis on top of the diploma training.</p>
+          </article>
+        </div>
+        <div class="stop">
+          <div class="rail"><div class="node magenta"></div></div>
+          <article class="card">
+            <div class="tag">Current stop</div>
+            <h3>Year 4, BBA-Marketing</h3>
+            <p>I am now a Year 4 student. This year is about closing the degree and getting clearer on the kind of marketing work I actually want to do, which for me is events rather than only screen-based campaigns.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="study">
+      <h2>What marketing means here</h2>
+      <p class="sub">The site is about the path, not a project gallery.</p>
+      <div class="card">
+        <h3>Why the diploma still matters</h3>
+        <p>HKU SPACE was not a detour. It is the reason I could enter the degree at Year 3. I treat that as part of the story: applied marketing first, then a fuller BBA at HSUHK. Visitors should be able to see both institutions without guessing which one I am in now.</p>
+      </div>
+      <div class="card">
+        <h3>What I am aiming at</h3>
+        <p>Event marketing sits between a brand and a live crowd. Timing, place, partnerships and the atmosphere of the day all matter. Watching major sport has been an informal lesson in that: a match or a Games is already an event people plan their week around.</p>
+      </div>
+    </section>
+
+    <section id="watch">
+      <h2>What I watch</h2>
+      <p class="sub">Tap a card. I follow the event, not only the score.</p>
+      <div class="sports">
+        <article class="sport" data-sport="cycling">
+          <b>Cycling</b>
+          <span>Stage races and one-day races. The route itself is the product.</span>
+          <p class="more">I like how a race is staged across cities and weather, and how a sponsor stays visible for hours without a hard sell. That is useful to think about for event branding.</p>
+        </article>
+        <article class="sport" data-sport="basketball">
+          <b>Basketball</b>
+          <span>Club nights and international windows. Fast crowd, short attention.</span>
+          <p class="more">Basketball shows a different event rhythm: timeouts, entertainment breaks, and a crowd that reacts in seconds. Good practice for noticing what keeps people in the room.</p>
+        </article>
+        <article class="sport" data-sport="football">
+          <b>Football</b>
+          <span>League weekends and tournament nights.</span>
+          <p class="more">Football is the sport I come back to most. A derby or a final is marketing and community at the same time: shirts, songs, travel, and a kick-off that structures the whole day.</p>
+        </article>
+      </div>
+      <div class="events">
+        <span class="chip">Olympics</span>
+        <span class="chip">Asian Games</span>
+        <span class="chip">World Cup</span>
+      </div>
+      <article class="card" style="margin-top:14px">
+        <h3>The big multi-sport calendar</h3>
+        <p>I also follow the Olympics, the Asian Games and the World Cup. They are the clearest examples I know of an event brand that has to work across languages, host cities and weeks of coverage. That is the scale I find interesting, even if a first job will be much smaller.</p>
+      </article>
+    </section>
+
+    <section id="next">
+      <h2>Next stop</h2>
+      <div class="next">
+        <div class="sign">
+          <div class="kicker">Career</div>
+          <div class="neon">Event marketer</div>
+          <p>I would like to work as an event marketer: planning how people hear about an event, why they should turn up, and how the brand feels on the ground. Study gave me the marketing language. Sport gave me a habit of watching how live occasions are packaged.</p>
+        </div>
+        <div class="card">
+          <div class="tag">This site</div>
+          <h3>A public introduction</h3>
+          <p>No phone number and no home address on purpose. If this page is being reviewed for class, the route above is the content: HKU SPACE, then HSUHK Year 3 and Year 4, then events.</p>
+        </div>
+      </div>
+    </section>
+    <footer>Fong Cheuk Shan (Ryan) · BBA-Marketing, Year 4 · The Hang Seng University of Hong Kong · Personal site for COM1006</footer>
+  </main>
+  <script>
+    const menu = document.getElementById("menu");
+    const nav = document.getElementById("nav");
+    menu.addEventListener("click", () => nav.classList.toggle("open"));
+    nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => nav.classList.remove("open")));
+    document.querySelectorAll(".sport").forEach((card) => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".sport").forEach((other) => other.classList.toggle("open", other === card && !card.classList.contains("open")));
+      });
+    });
+    const links = [...nav.querySelectorAll("a")];
+    const sections = links.map((a) => document.querySelector(a.getAttribute("href")));
+    const onScroll = () => {
+      const y = window.scrollY + 120;
+      let current = sections[0];
+      sections.forEach((sec) => { if (sec && sec.offsetTop <= y) current = sec; });
+      links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + (current && current.id)));
+    };
+    document.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  </script>
+</body>
+</html>
